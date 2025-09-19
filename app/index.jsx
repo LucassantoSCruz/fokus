@@ -1,12 +1,44 @@
+import { useState } from "react";
 import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 
+const pomodoro = [
+  {
+    id: 'focus',
+    initialValue: 25,
+    image: require('./pomodoro.png'),
+    display: 'Foco'
+  },
+  {
+    id: 'short',
+    initialValue: 5,
+    image: require('./short.png'),
+    display: 'Pausa curta'
+  },
+  {
+    id: 'long',
+    initialValue: 15,
+    image: require('./long.png'),
+    display: 'Pausa longa'
+  }
+]
+
 export default function Index() {
+
+  const [timerType, setTimerType] = useState(pomodoro[0])
+
   return (
     <View style={styles.container}>
-      <Image source={require('./pomodoro.png')} style={{ width: '30%', height: '30%' }} />
+      <Image source={timerType.image} style={{ width: '30%', height: '30%' }} />
       <View style={styles.actions}>
+        <View style={styles.context}>
+          <Pressable style={styles.contextButtonActive}>
+            <Text style={styles.contextButtonText}>
+              Foco
+            </Text>
+          </Pressable>
+        </View>
         <Text style={styles.timer}>
-          25:00
+          {new Date(timerType.initialValue * 1000).toLocaleTimeString('pt-BR', { minute: '2-digit', second: '2-digit' })}
         </Text>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>
@@ -43,6 +75,20 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#144480',
     gap: 32
+  },
+  context: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+  contextButtonText: {
+    fontSize: 12.5,
+    color: '#FFF',
+    padding: 8
+  },
+  contextButtonActive: {
+    backgroundColor: '#144480',
+    borderRadius: 8
   },
   timer: {
     fontSize: 54,
