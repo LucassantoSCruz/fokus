@@ -1,5 +1,6 @@
 import { Text, Image, View, StyleSheet } from "react-native";
 import { FokusButton } from "../components/FokusButton"
+import { router } from "expo-router";
 
 export default function Index() {
   return (
@@ -13,6 +14,7 @@ export default function Index() {
         <Image source={require('../assets/images/home.png')} style={styles.homeImage} />
         <FokusButton
           title={"Quero iniciar"}
+          onPress={() => router.navigate('/pomodoro')}
         />
       </View>
       <View style={styles.footer}>
