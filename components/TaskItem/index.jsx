@@ -2,10 +2,17 @@ import { Pressable, Text, View, StyleSheet } from "react-native";
 import { IconCheck, IconPencil, IconTrash } from "../Icons"
 
 const TaskItem = ({ completed, text, onToggleComplete, onPressEdit, onPressDelete }) => {
+
+    const cardStyles = [styles.card];
+
+    if (completed) {
+        cardStyles.push(styles.cardCompleted)
+    }
+
     return (
-        <View style={styles.card}>
+        <View style={cardStyles}>
             <Pressable onPress={onToggleComplete}>
-                <IconCheck completed={completed} />
+                <IconCheck checked={completed} />
             </Pressable>
             <Text style={styles.text}>
                 {text}
@@ -30,6 +37,9 @@ const styles = StyleSheet.create({
         paddingVertical: 18,
         borderRadius: 8,
         gap: 8
+    },
+    cardCompleted: {
+        backgroundColor: '#0F725C'
     },
     text: {
         flex: 1,

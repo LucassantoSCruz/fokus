@@ -1,3 +1,5 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 
 export default function Layout() {
@@ -35,7 +37,11 @@ export default function Layout() {
             <Drawer.Screen
                 name="add-task/index"
                 options={{
-                    drawerItemStyle: { display: 'none' }
+                    drawerItemStyle: { display: 'none' },
+                    title: '',
+                    headerLeft: () => {
+                        return <Ionicons name="arrow-back" size={24} color="white" style={{marginLeft: 16}} onPress={() => router.navigate('/tasks')}/>
+                    }
                 }}
             />
             <Drawer.Screen
