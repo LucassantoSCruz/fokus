@@ -1,33 +1,59 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, FlatList } from "react-native";
 import TaskItem from "../../components/TaskItem";
 import { FokusButton } from "../../components/FokusButton"
 import { IconPlus } from "../../components/Icons";
 import { router } from "expo-router";
+import useTaskContext from "../../components/context/useTaskContext";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Tasks() {
+
+    const { tasks, deleteTask, toogleTaskCompleted } = useTaskContext()
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.wrapper}>
-                <Text style={styles.text}>
-                    Lista de Tarefas:
-                </Text>
                 <View style={styles.inner}>
-                    <TaskItem
-                        completed
-                        text="Estudar React"
-                    />
-                    <TaskItem
-                        text="Estudar React Native"
+                    {/* {tasks.map(t => {
+                        return (
+                            <TaskItem
+                                completed={t.completed}
+                                text={t.description}
+                                key={t.id}
+                            />
+                        )
+                    })} */}
+                    <FlatList
+                        data={tasks}
+                        renderItem={({ item }) =>
+                            <TaskItem
+                                completed={item.completed}
+                                text={item.description}
+                                onPressDelete={() => deleteTask(item.id)}
+                                onToggleComplete={() => toogleTaskCompleted(item.id)}
+                                onPressEdit={() => router.navigate(`/edit-task/${item.id}`)}
+                            />}
+                        keyExtractor={item => item.id}
+                        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+                        ListHeaderComponent={
+                            <Text style={styles.text}>
+                                Lista de Tarefas:
+                            </Text>
+                        }
+                        ListFooterComponent={
+                            <View style={{ marginTop: 16 }}>
+                                <FokusButton
+                                    title="Adicionar nova tarefa"
+                                    icon={<IconPlus outline />}
+                                    outline
+                                    onPress={() => router.navigate('/add-task')}
+                                />
+                            </View>
+                        }
                     />
                 </View>
-                <FokusButton
-                    title="Adicionar nova tarefa"
-                    icon={<IconPlus outline />}
-                    outline
-                    onPress={() => router.navigate('/add-task')}
-                />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -44,7 +70,8 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
         color: '#FFF',
-        fontSize: 26
+        fontSize: 26,
+        marginBottom: 16
     },
     inner: {
         gap: 8,
