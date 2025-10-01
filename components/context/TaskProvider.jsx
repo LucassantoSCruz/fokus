@@ -14,7 +14,7 @@ export function TasksProvider({ children }) {
         const getData = async () => {
             try {
                 const jsonValue = await AsyncStorage.getItem(TASKS_STORAGE_KEY);
-                const loadedData =  jsonValue != null ? JSON.parse(jsonValue) : [];
+                const loadedData = jsonValue != null ? JSON.parse(jsonValue) : [];
                 setTasks(loadedData)
                 setIsLoaded(true)
             } catch (e) {
@@ -69,12 +69,24 @@ export function TasksProvider({ children }) {
         })
     }
 
+    const updateTask = (id, newDescription) => {
+        setTasks(oldState =>
+            oldState.map(t => {
+                if (t.id == id) {
+                    return { ...t, description: newDescription }
+                }
+                return t
+            })
+        )
+    }
+
     return (
         <TaskContext.Provider value={{
             tasks,
             addTask,
             toogleTaskCompleted,
-            deleteTask
+            deleteTask,
+            updateTask
         }}>
             {children}
         </TaskContext.Provider>
