@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { Image, StyleSheet, Text, View, Pressable } from "react-native";
+import { Image, StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
 import { FokusButton } from "../components/FokusButton"
 import { ActionButton } from "../components/ActionButton"
 import { Timer } from '../components/Timer'
 import { IconPause, IconPlay } from '../components/Icons'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const pomodoro = [
   {
@@ -69,35 +70,37 @@ export default function Pomodoro() {
   }
 
   return (
-    <View style={styles.container}>
-      <Image source={timerType.image} style={{ width: '100%' }} />
-      <View style={styles.actions}>
-        <View style={styles.context}>
-          {pomodoro.map(p => (
-            <ActionButton
-              key={p.id}
-              active={timerType.id === p.id}
-              onPress={() => toogleTimerType(p)}
-              display={p.display}
-            />
-          ))}
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.inner}>
+        <Image source={timerType.image} style={{ width: '100%' }} />
+        <View style={styles.actions}>
+          <View style={styles.context}>
+            {pomodoro.map(p => (
+              <ActionButton
+                key={p.id}
+                active={timerType.id === p.id}
+                onPress={() => toogleTimerType(p)}
+                display={p.display}
+              />
+            ))}
+          </View>
+          <Timer totalSeconds={seconds} />
+          <FokusButton
+            title={timerRunning ? 'Pausar' : 'Começar'}
+            icon={timerRunning ? <IconPause /> : <IconPlay />}
+            onPress={toogleTimer}
+          />
         </View>
-        <Timer totalSeconds={seconds} />
-        <FokusButton
-          title={timerRunning ? 'Pausar' : 'Começar'}
-          icon={timerRunning ? <IconPause/> : <IconPlay/>}
-          onPress={toogleTimer}
-        />
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Projeto fictício e sem fins comerciais.
-        </Text>
-        <Text style={styles.footerText}>
-          Desenvolvido por Alura.
-        </Text>
-      </View>
-    </View >
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Projeto fictício e sem fins comerciais.
+          </Text>
+          <Text style={styles.footerText}>
+            Desenvolvido por Alura.
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -105,8 +108,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: '#021123',
+  },
+  inner: {
+    alignItems: "center",
     gap: 40
   },
   actions: {
